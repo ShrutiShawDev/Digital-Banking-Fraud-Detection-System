@@ -68,10 +68,44 @@ public class AccountService {
         log.info("Account blocked: {}", accountNumber);
     }
 
+    /**
+     * Deduct balance from sender account
+     * Called by Transaction Service
+     * @param accountNumber
+     * @param amount
+     */
     public void deductBalance(String accountNumber, BigDecimal amount) {
+        log.info("Deducting balance {} from account: {}", amount, accountNumber);
+        Account account = accountRepository.findByAccountNumber(accountNumber)
+                .orElseThrow(()->new RuntimeException("Account not found"));
+
+        if(account.getStatus() != AccountStatus.ACTIVE){
+            throw new RuntimeException("Account is not active "+accountNumber);
+        }
+
+        if(account.getBalance().compareTo(amount) < 0){
+            throw new RuntimeException("Insufficient funds for account "+accountNumber);
+        }
+
+        account.setBalance(account.getBalance().subtract(amount));
+        accountRepository.save(account);
+
+        log.info("Balance updated. New Balance: {}", account.getBalance());
     }
 
+    /**
+     * Called by Transaction Service via kafka
+     * @param accountNumber
+     * @param amount
+     */
     public void creditBalance(String accountNumber, BigDecimal amount) {
+        log.info("Crediting {} to account: {}", amount, accountNumber);
+        Account account = accountRepository.findByAccountNumber(accountNumber)
+                .orElseThrow(()->new RuntimeException("Account not found"));
+
+        account.setBalance(account.getBalance().add(amount));
+        accountRepository.save(account);
+        log.info("Balance Credited. New Balance: {}", account.getBalance());
     }
 
     // Generate unique 12-digit account number
@@ -83,7 +117,6 @@ public class AccountService {
             /**
              * Formats the number as a 12-digit account number.
              * Leading zeros are added when necessary.
-             *
              * %  -> format specifier
              * 0  -> pad with zeros
              * 12 -> width of 12 characters
