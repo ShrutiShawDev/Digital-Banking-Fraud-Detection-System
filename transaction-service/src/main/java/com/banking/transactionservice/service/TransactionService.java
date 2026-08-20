@@ -182,6 +182,17 @@ public class TransactionService {
         log.info("SAGA COMPENSATION COMPLETE - {} refunded to {}", transaction.getAmount(), transaction.getSenderAccountNumber());
     }
 
+    private void processCleanResult(String transactionId){
+        Transaction transaction = transactionRepository.findById(transactionId)
+                .orElseThrow(()-> new RuntimeException("Transaction not found "+transactionId));
+
+        if(transaction.getStatus() != TransactionStatus.PROCESSING){
+            log.warn("Transaction {} not PROCESSING - skipping", transactionId);
+            return;
+        }
+
+        completeTransaction(transaction);
+    }
 
     private TransactionResponse mapToResponse(Transaction transaction){
         return TransactionResponse.builder()

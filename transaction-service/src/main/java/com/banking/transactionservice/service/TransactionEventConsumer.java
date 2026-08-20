@@ -19,6 +19,7 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 @RequiredArgsConstructor
 public class TransactionEventConsumer {
+    private final TransactionService transactionService;
     private final TransactionRepository transactionRepository;
     private final RedisTemplate<String, Object> redisTemplate;
     private final KafkaTemplate<String, Object> kafkaTemplate;
@@ -70,6 +71,16 @@ public class TransactionEventConsumer {
             kafkaTemplate.send(TRANSACTION_OTP_GENERATED_TOPIC, transactionId, otpEvent);
         } catch (Exception e) {
             log.error("Error handling verification required: {}", e.getMessage());
+        }
+    }
+
+    @KafkaListener(topics = "fraud.check.clean")
+    public void consumerFraudCheckCleanResult(@Payload Map<String, Object> payload){
+        try{
+            String transactionId = (String) payload.get("transactionId");
+            transactionService.processCleanResult(transactionId);
+        }catch (Exception e){
+            log.error("Error processing fraud check result: {}", e.getMessage());
         }
     }
 }
