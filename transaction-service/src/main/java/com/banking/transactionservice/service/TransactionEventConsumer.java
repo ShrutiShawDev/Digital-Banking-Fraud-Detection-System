@@ -21,7 +21,7 @@ import java.util.concurrent.TimeUnit;
 public class TransactionEventConsumer {
     private final TransactionService transactionService;
     private final TransactionRepository transactionRepository;
-    private final RedisTemplate<String, Object> redisTemplate;
+    private final RedisTemplate<String, String> redisTemplate;
     private final KafkaTemplate<String, Object> kafkaTemplate;
 
     private static final String TRANSACTION_OTP_GENERATED_TOPIC = "transaction.otp-generated";

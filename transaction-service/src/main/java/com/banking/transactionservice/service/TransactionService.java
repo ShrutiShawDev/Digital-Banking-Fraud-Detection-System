@@ -29,7 +29,6 @@ import java.util.stream.Collectors;
 public class TransactionService {
     private final TransactionRepository transactionRepository;
     private final AccountServiceClient accountServiceClient;
-    private final TransactionInitiatedEvent transactionInitiatedEvent;
 
     private final RedisTemplate<String, String> redisTemplate;
     private final KafkaTemplate<String, Object> kafkaTemplate;
@@ -62,6 +61,7 @@ public class TransactionService {
                 .build();
 
         Transaction savedTransaction = transactionRepository.save(transaction);
+        transaction.setCompletedAt(LocalDateTime.now());
         log.info("Transaction saved as PROCESSING: {}", savedTransaction.getId());
 
         // SAGA Step - 2: Publish for fraud check
@@ -97,6 +97,14 @@ public class TransactionService {
 
         String otpKey = "verification:otp" + transactionId;
         String storedOtp = redisTemplate.opsForValue().get(otpKey);
+
+//        Object storedOtpObject = redisTemplate.opsForValue().get(otpKey);
+//        String storedOtp = storedOtpObject != null
+//                ? storedOtpObject.toString()
+//                : null;
+
+        log.info("OTP verification - transaction: {}, entered: {}, stored: {}",
+                transactionId, otp, storedOtp);
 
         // OTP Expired
         if(storedOtp == null){
@@ -182,7 +190,7 @@ public class TransactionService {
         log.info("SAGA COMPENSATION COMPLETE - {} refunded to {}", transaction.getAmount(), transaction.getSenderAccountNumber());
     }
 
-    private void processCleanResult(String transactionId){
+    public void processCleanResult(String transactionId){
         Transaction transaction = transactionRepository.findById(transactionId)
                 .orElseThrow(()-> new RuntimeException("Transaction not found "+transactionId));
 
