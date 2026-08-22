@@ -6,23 +6,16 @@ A **microservices-based digital banking system** that enables account transfers,
 
 ## 🚀 Key Features
 
-- Microservices-based banking architecture
-- API Gateway as the entry point for backend services
-- Account management with Savings, Current, and Fixed Deposit account types
-- Account balance management with account blocking support
-- SAGA-style transaction workflow
-- Apache Kafka for asynchronous event-driven communication
-- Redis-powered real-time fraud detection
-- Velocity-based fraud detection
-- Unusual transaction amount detection
-- Balance-percentage fraud detection
-- OTP-based verification for suspicious transactions
-- Automatic account blocking after rejected verification
-- SAGA compensation/refund when a transaction is cancelled
-- Razorpay payment order creation and webhook processing
-- Event-driven email notifications
-- Transaction history and transaction status tracking
-- Docker-based service deployment
+- 🏦 Microservices-based digital banking architecture
+- 💸 Account-to-account transfer processing
+- 🔄 SAGA-style distributed transaction compensation and refunds
+- 🛡️ Real-time fraud detection using Redis
+- 🔐 OTP-based verification for suspicious transactions
+- 🚫 Automatic account blocking for fraudulent activity
+- 📡 Kafka-based event-driven communication
+- 💳 Razorpay payment integration with webhook processing
+- 📧 Event-driven email notifications
+- 🐳 Docker-based service deployment
 
 ---
 
