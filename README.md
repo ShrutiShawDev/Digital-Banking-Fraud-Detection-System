@@ -1,8 +1,6 @@
 # Digital Banking & Fraud Detection System
 
-A distributed digital banking backend built with **Java, Spring Boot, Microservices, Apache Kafka, Redis, MySQL, and Razorpay**.
-
-The system demonstrates how a banking platform can process account transfers through an event-driven workflow, perform **real-time fraud detection**, require **OTP verification for suspicious transactions**, execute **SAGA-style compensation/refunds**, process external payments through Razorpay, and send asynchronous email notifications.
+A **microservices-based digital banking system** that enables account transfers, detects suspicious transactions in real time, verifies high-risk transfers using OTPs, and handles failed transactions through SAGA-style compensation and refunds. It also supports **Razorpay payments** and **event-driven email notifications** using Kafka.
 
 ---
 
@@ -159,9 +157,7 @@ The system demonstrates how a banking platform can process account transfers thr
                                  │               |
                                  ▼               ▼
                           Credit Receiver     Email Alert    
-
-
----
+```
 
 ## 🧩 Microservices
 
@@ -174,6 +170,7 @@ The system demonstrates how a banking platform can process account transfers thr
 | **Payment Service** | Razorpay order creation and webhook processing |
 | **Notification Service** | Event-driven email notifications |
 
+---
 
 ## 🛠️ Tech Stack
 
