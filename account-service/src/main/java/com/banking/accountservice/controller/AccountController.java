@@ -38,6 +38,11 @@ public class AccountController {
         return ResponseEntity.status(HttpStatus.OK).body(accountService.getBalance(accountNumber));
     }
 
+    @GetMapping("/{accountNumber}/email")
+    public ResponseEntity<String> getEmail(@PathVariable String accountNumber){
+        return ResponseEntity.status(HttpStatus.OK).body(accountService.getEmail(accountNumber));
+    }
+
     @PutMapping("/{accountNumber}/block")
     public ResponseEntity<String> blockAccount(@PathVariable String accountNumber){
         accountService.blockAccount(accountNumber);

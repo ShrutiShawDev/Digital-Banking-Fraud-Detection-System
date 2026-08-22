@@ -142,4 +142,9 @@ public class AccountService {
                 .build();
         return accountResponse;
     }
+
+    public String getEmail(String accountNumber) {
+        Account account = accountRepository.findByAccountNumber(accountNumber).orElseThrow(()->new RuntimeException("Account not found"));
+        return account.getEmail();
+    }
 }
