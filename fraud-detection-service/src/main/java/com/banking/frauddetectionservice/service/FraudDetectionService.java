@@ -20,7 +20,7 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 public class FraudDetectionService {
 
-    private final KafkaTemplate kafkaTemplate;
+    private final KafkaTemplate<String, Object> kafkaTemplate;
     private final AccountServiceClient accountServiceClient;
     private  final RedisTemplate<String, Object> redisTemplate;
 
@@ -49,7 +49,7 @@ public class FraudDetectionService {
         FraudCheckResult result = performFraudChecks(accountNumber, amount, senderBalance);
 
         if(result.isFraud()){
-            log.info("Suspicious activity detected - account: {}"+"reason: {} - requesting OTP verification", accountNumber, result.getReason());
+            log.info("Suspicious activity detected - account: {} "+"reason: {} - requesting OTP verification", accountNumber, result.getReason());
 
             Map<String, Object> verificationEvent = new HashMap<>();
             verificationEvent.put("transactionId", transactionId);

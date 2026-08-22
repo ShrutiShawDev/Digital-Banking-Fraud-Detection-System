@@ -16,7 +16,7 @@ public class FraudDetectionEventConsumer {
 
     @KafkaListener(topics = "transaction.initiated", groupId = "fraud-detection-group")
     public void consumeTransactionInitiated(@Payload Map<String, Object> payload){
-        log.info("Received transaction dor fraud check: {}", payload.get("transactionId"));
+        log.info("Received transaction for fraud check: {}", payload.get("transactionId"));
 
         try{
             fraudDetectionService.checkTransaction(payload);
